@@ -11,6 +11,7 @@ INTERVAL_SEC = 3
 
 
 class BgSlider():
+#classとは「ひな型」の事で、ひな型の中にデータを入れる領域、処理の仕方を書く領域を設ける。
     def __init__(self):
         self.index = 0
         self.directory = None
@@ -18,6 +19,9 @@ class BgSlider():
     def setup(self):
         global off
         with codecs.open('path.txt', 'r', 'utf-8') as f:
+#with構文は、cLose処理を省することができる。開始時と終了時の定型処理を必ず実行してくれるというメリットがある。
+#asを使うことで、ライプラリ名に好きな名前をつけることができる。
+#path.txtというファイルを好きなディレクトリに書き換える。    
             lines = f.readlines()
             self.directory = lines[0].strip()
 
@@ -34,6 +38,7 @@ class BgSlider():
         if self.index == len(files) - 1:
             self.index = 0
         else:
+#elseとは、条件式がFalseの場合行う処理
             self.index += 1
         time.sleep(INTERVAL_SEC)
 
@@ -41,21 +46,28 @@ class BgSlider():
         base_time = time.time()
         next_time = 0
         while True:
+#while文は指定した条件式が真の間、処理を繰り返し実行。基本的な書式→while 条件式:条件式が真の時に実行する文
             try:
+#tryは例外処理の基本でその他にexceptがある
                 t = threading.Thread(target=f)
                 t.start()
                 if wait:
+#Python で条件分岐を行う際にif 文を使用する
                     t.join()
                 next_time = ((base_time - time.time()) % interval) or interval
                 time.sleep(next_time)
             except KeyboardInterrupt:
+#exceptは例外処理の基本でその他にtryがある
                 exit()
 
 
 if __name__ == "__main__":
     try:
+#tryは例外処理の基本でその他にexceptがある
+
         bg = BgSlider()
         bg.setup()
         bg.schedule(INTERVAL_SEC, bg.worker, False)
     finally:
-        ctypes.windll.user32.SystemParametersInfoW(20, 0, None, 0)
+#finallyは終了時に常に行う処理のこと
+        c.windll.user32.SystemParametersInfoW(20, 0, None, 0)
