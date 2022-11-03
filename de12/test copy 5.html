@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="jp">
-    <title>🤍</title>
+    <title>🖤</title>
     <link rel="stylesheet" href="./css/style.css">
 <head></head>
 <h3>第5回課題<br>
-<br>Windowsの壁紙スライダーをpythonで作ってみた
+<br>Windowsの壁紙スライダーをpythonで作成
 <br>
 <h4>ソースコード</h4>
 <pre><code>
@@ -19,66 +19,68 @@
     
     INTERVAL_SEC = 3
     
-    
-    class BgSlider():
-    #classとは「ひな型」の事で、ひな型の中にデータを入れる領域、処理の仕方を書く領域を設ける。
+    class BgSlider():<br>
+    <h4>#classとは「ひな型」の事で、ひな型の中にデータを入れる領域、処理の仕方を書く領域を設ける。</h4><br>
         def __init__(self):
             self.index = 0
             self.directory = None
     
         def setup(self):
             global off
-            with codecs.open('path.txt', 'r', 'utf-8') as f:
-    #with構文は、cLose処理を省することができる。開始時と終了時の定型処理を必ず実行してくれるというメリットがある。
-    #asを使うことで、ライプラリ名に好きな名前をつけることができる。
-    #path.txtというファイルを好きなディレクトリに書き換える。    
+            with codecs.open('path.txt', 'r', 'utf-8') as f:<br>
+    <h4>#with構文は、cLose処理を省することができる。開始時と終了時の定型処理を必ず実行してくれるというメリットがある。
+#asを使うことで、ライプラリ名に好きな名前をつけることができる。
+#path.txtというファイルを好きなディレクトリに書き換える。</h4><br>    
                 lines = f.readlines()
                 self.directory = lines[0].strip()
     
         def worker(self):
             path = self.directory + r'\*.jpg'
             path.replace('\\\\', '\\')
-            files = glob.glob(path)
-            # [print(file) for file in files] # ファイルリストをコンソールにまとめて出力するときに使う
-            # file = files[random.randint(0, len(files) - 1)] # ランダムにしたい場合はここを使う
-            files = sorted(files) # 順番に表示したい場合はここを使う
-            file = files[self.index] # 順番に表示したい場合はここを使う
+            files = glob.glob(path)<br>
+    <h4># [print(file) for file in files] 
+#ファイルリストをコンソールにまとめて出力するときに使う
+#file = files[random.randint(0, len(files) - 1)] 
+#ランダムにしたい場合はここを使う</h4><br>
+            files = sorted(files) <br>
+    <h4>#順番に表示したい場合はここを使う</h4><br>
+            file = files[self.index] <br>
+    <h4>#順番に表示したい場合はここを使う</h4><br>
             print(file)
             ctypes.windll.user32.SystemParametersInfoW(20, 0, file, 0)
             if self.index == len(files) - 1:
                 self.index = 0
-            else:
-    #elseとは、条件式がFalseの場合行う処理
+            else:<br>
+    <h4>#elseとは、条件式がFalseの場合行う処理</h4><br>
                 self.index += 1
             time.sleep(INTERVAL_SEC)
     
         def schedule(self, interval, f, wait=True):
             base_time = time.time()
             next_time = 0
-            while True:
-    #while文は指定した条件式が真の間、処理を繰り返し実行。基本的な書式→while 条件式:条件式が真の時に実行する文
-                try:
-    #tryは例外処理の基本でその他にexceptがある
+            while True:<br>
+    <h4>#while文は指定した条件式が真の間、処理を繰り返し実行。基本的な書式→while 条件式:条件式が真の時に実行する文</h4><br>
+                try:<br>
+    <h4>#tryは例外処理の基本でその他にexceptがある</h4><br>
                     t = threading.Thread(target=f)
                     t.start()
-                    if wait:
-    #Python で条件分岐を行う際にif 文を使用する
+                    if wait:<br>
+    <h4>#Python で条件分岐を行う際にif 文を使用する</h4><br>
                         t.join()
                     next_time = ((base_time - time.time()) % interval) or interval
                     time.sleep(next_time)
-                except KeyboardInterrupt:
-    #exceptは例外処理の基本でその他にtryがある
+                except KeyboardInterrupt:<br>
+    <h4>#exceptは例外処理の基本でその他にtryがある</h4><br>
                     exit()
     
-    
     if __name__ == "__main__":
-        try:
-    #tryは例外処理の基本でその他にexceptがある
+        try:<br>
+    <h4>#tryは例外処理の基本でその他にexceptがある</h4><br>
     
             bg = BgSlider()
             bg.setup()
             bg.schedule(INTERVAL_SEC, bg.worker, False)
-        finally:
-    #finallyは終了時に常に行う処理のこと
+        finally:<br>
+    <h4>#finallyは終了時に常に行う処理のこと</h4><br>
             c.windll.user32.SystemParametersInfoW(20, 0, None, 0)
         </code></pre>
